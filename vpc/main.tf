@@ -4,6 +4,4 @@ resource "aws_vpc" "main" {
 }
   tags = {
     Name = "my vpc"
-  } tags = {
-    Name = "main"
   }
