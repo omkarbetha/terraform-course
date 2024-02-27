@@ -91,8 +91,19 @@ resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.elastic_ip.id
   subnet_id     = aws_subnet.public_subnet.id
 
-  tags = {
-    Name = "NATGW"
-  }
-  # depends_on = [aws_internet_gateway.example]
 }
+
+resource "aws_route" "private" {
+  route_table_id            = aws_route_table.private_route_table.id
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = aws_nat_gateway.nat.id
+  # depends_on                = [aws_route_table.private]  
+}
+
+resource "aws_route" "database" {
+  route_table_id            = aws_route_table.database_route_table.id
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id            = aws_nat_gateway.nat.id
+  # depends_on                = [aws_route_table.database]  
+}
+  
