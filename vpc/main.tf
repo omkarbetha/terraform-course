@@ -60,3 +60,25 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private_subnet.id
   route_table_id = aws_route_table.private_route_table.id
 }
+
+resource "aws_subnet" "database_subnet" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.3.0/24"
+
+  tags = {
+    Name = "terraform-database-subnet"
+  }
+}
+
+resource "aws_route_table" "database_route_table" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "terraform-database-rt"
+  }
+}
+
+resource "aws_route_table_association" "database" {
+  subnet_id      = aws_subnet.database_subnet.id
+  route_table_id = aws_route_table.database_route_table.id
+}
