@@ -82,3 +82,17 @@ resource "aws_route_table_association" "database" {
   subnet_id      = aws_subnet.database_subnet.id
   route_table_id = aws_route_table.database_route_table.id
 }
+
+resource "aws_eip" "elastic_ip" {
+  domain   = "vpc"
+}
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.elastic_ip.id
+  subnet_id     = aws_subnet.public_subnet.id
+
+  tags = {
+    Name = "NATGW"
+  }
+  # depends_on = [aws_internet_gateway.example]
+}
